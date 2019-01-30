@@ -1,0 +1,16 @@
+version: "3"
+services:
+  minimal-todo-mongo-dev:
+    container_name: minimal-todo-mongo-dev
+    image: bitnami/mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_ROOT_PASSWORD=root
+#  mongo-test:
+#    container_name: mongo-test
+#    image: bitnami/mongodb
+#    ports:
+#      - "27018:27017"
+#    environment:
+#      - MONGODB_ROOT_PASSWORD=test
