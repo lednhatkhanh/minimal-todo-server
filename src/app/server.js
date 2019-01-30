@@ -1,21 +1,26 @@
-import { ApolloServer, gql } from "apollo-server-express";
+import { ApolloServer } from "apollo-server-express";
 
 import { createApp } from "~/app/app";
 import { appConfig } from "~/config";
 import { connectToDatabase } from "~/app/database";
+import { typeDefs, resolvers } from "~/components";
 
-export const startServer = () => {
-  const typeDefs = gql`
-    type Query {
-      hello: String
-    }
-  `;
+export const startServer = async () => {
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    context: ctx => ({ req: ctx.req, res: ctx.res }),
+  });
 
-  const resolvers = { Query: { hello: () => "Hello World" } };
-
-  const server = new ApolloServer({ typeDefs, resolvers });
   const app = createApp();
-  connectToDatabase();
+
+  try {
+    await connectToDatabase();
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.log(error);
+    return;
+  }
 
   server.applyMiddleware({ app });
 

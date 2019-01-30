@@ -5,9 +5,9 @@ const appConfigSchema = joi.object({
     .object({
       NODE_ENV: joi.string().required(),
       PORT: joi.number().required(),
-      // JWT_KEY: joi.string().required(),
-      // JWT_EXPIRES_IN: joi.number().required(),
-      // HASH_TIMES: joi.number().required(),
+      JWT_KEY: joi.string().required(),
+      JWT_EXPIRES_IN: joi.number().required(),
+      HASH_TIMES: joi.number().required(),
       // CLIENT_URL: joi.string().required(),
     })
     .required(),
@@ -26,6 +26,9 @@ export const appConfig = {
   APP: {
     NODE_ENV: process.env.NODE_ENV,
     PORT: parseInt(process.env.PORT, 10),
+    HASH_TIMES: parseInt(process.env.HASH_TIMES, 10),
+    JWT_KEY: process.env.JWT_KEY,
+    JWT_EXPIRES_IN: parseInt(process.env.JWT_EXPIRES_IN, 10),
   },
   MONGO: {
     HOST: process.env.MONGODB_HOST,

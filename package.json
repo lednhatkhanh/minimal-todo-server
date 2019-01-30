@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "build": "babel src --out-dir build"
   },
   "author": "Nhat Khanh <lednhatkhanh@gmail.com>",
   "license": "MIT",
@@ -14,9 +15,12 @@
     "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "graphql": "^14.1.1",
+    "graphql-iso-date": "^3.6.1",
     "helmet": "^3.15.0",
     "joi": "^14.3.1",
     "jsonwebtoken": "^8.4.0",
+    "lodash": "^4.17.11",
+    "moment": "^2.24.0",
     "mongoose": "^5.4.7"
   },
   "devDependencies": {
@@ -31,8 +35,9 @@
     "eslint-config-prettier": "^4.0.0",
     "eslint-import-resolver-babel-module": "^5.0.1",
     "eslint-plugin-import": "^2.15.0",
+    "eslint-plugin-jest": "^22.2.1",
     "eslint-plugin-prettier": "^3.0.1",
-    "jst": "0.0.13",
+    "jest": "^24.0.0",
     "nodemon": "^1.18.9",
     "prettier": "^1.16.1",
     "rimraf": "^2.6.3"
