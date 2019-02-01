@@ -3,13 +3,14 @@ import { ApolloServer } from "apollo-server-express";
 import { createApp } from "~/app/app";
 import { appConfig } from "~/config";
 import { connectToDatabase } from "~/app/database";
-import { typeDefs, resolvers } from "~/components";
+import { typeDefs, resolvers, schemaDirectives } from "~/components";
 
 export const startServer = async () => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
     context: ctx => ({ req: ctx.req, res: ctx.res }),
+    schemaDirectives,
   });
 
   const app = createApp();

@@ -9,7 +9,7 @@ export const userType = gql`
   }
 
   type Query {
-    me: User
+    me: User @auth
   }
 
   type Mutation {

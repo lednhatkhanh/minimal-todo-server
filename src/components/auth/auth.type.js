@@ -11,8 +11,4 @@ export const authType = gql`
     login(email: String!, password: String!): AuthResponse!
     register(email: String!, name: String!, password: String!): AuthResponse!
   }
-
-  extend type Query {
-    placeholder: String
-  }
 `;
