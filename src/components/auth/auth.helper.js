@@ -3,7 +3,7 @@ import moment from "moment";
 
 import { appConfig } from "~/config";
 
-export const createAuthResponse = userId => {
+export function createAuthResponse(userId) {
   const payload = {
     userId,
   };
@@ -14,4 +14,4 @@ export const createAuthResponse = userId => {
   });
 
   return { token, expiresIn, issuedAt: moment().toDate() };
-};
+}

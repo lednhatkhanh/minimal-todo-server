@@ -1,6 +1,8 @@
+import { UserModel } from "./user.model";
+
 export const userResolver = {
   Query: {
-    me: async (_parent, _data, { userId }) => {
+    async me(_parent, _data, { userId }) {
       if (userId) {
         return await UserModel.findById(userId);
       }

@@ -5,7 +5,7 @@ import { createAuthResponse } from "./auth.helper";
 
 export const authResolver = {
   Mutation: {
-    login: async (_parent, { email, password }) => {
+    async login(_parent, { email, password }) {
       const user = await UserModel.findOne({ email });
 
       if (!user) {
@@ -19,7 +19,7 @@ export const authResolver = {
 
       return createAuthResponse(user.id);
     },
-    register: async (_parent, { email, password, name }) => {
+    async register(_parent, { email, password, name }) {
       const existingUser = await UserModel.findOne({ email });
 
       if (existingUser) {

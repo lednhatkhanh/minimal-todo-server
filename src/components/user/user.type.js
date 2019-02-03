@@ -2,6 +2,7 @@ import { gql } from "apollo-server-express";
 
 export const userType = gql`
   type User {
+    id: ID!
     email: String!
     name: String!
     createdAt: DateTime!

@@ -5,7 +5,7 @@ import { appConfig } from "~/config";
 import { connectToDatabase } from "~/app/database";
 import { typeDefs, resolvers, schemaDirectives } from "~/components";
 
-export const startServer = async () => {
+export async function startServer() {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
@@ -28,4 +28,4 @@ export const startServer = async () => {
   app.listen({ port: appConfig.APP.PORT }, () => {
     console.log(`Server ready at http://localhost:${appConfig.APP.PORT}${server.graphqlPath}`);
   });
-};
+}

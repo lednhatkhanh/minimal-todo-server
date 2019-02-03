@@ -12,9 +12,14 @@ export class AuthDirective extends SchemaDirectiveVisitor {
       const [, , ctx] = args;
       const authHeader = ctx.req.get("authorization");
       const tokenRegex = /^Bearer\s\S+/i;
+
+      if (!authHeader || !tokenRegex.test(authHeader)) {
+        return resolve.apply(this, args);
+      }
+
       const token = authHeader.split(" ")[1];
 
-      if (authHeader && tokenRegex.test(authHeader) && token) {
+      if (token) {
         let authPayload;
 
         try {
