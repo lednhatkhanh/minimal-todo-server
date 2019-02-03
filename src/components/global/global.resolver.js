@@ -1,10 +1,12 @@
 import { GraphQLDateTime } from "graphql-iso-date";
 import faker from "faker";
+import bcrypt from "bcrypt";
 
 import { UserModel } from "../user";
 import { TaskModel } from "../task";
 
 import { randomDate } from "./global.helper";
+import { appConfig } from "~/config";
 
 export const globalResolver = {
   DateTime: GraphQLDateTime,
@@ -16,10 +18,11 @@ export const globalResolver = {
 
       await Promise.all([UserModel.deleteMany({}), TaskModel.deleteMany({})]);
 
+      const hashedPassword = await bcrypt.hash("Abc123@@", appConfig.APP.HASH_TIMES);
       const userIds = (await UserModel.insertMany([
         new UserModel({
           email: "lednhatkhanh@gmail.com",
-          password: "Abc123@@",
+          password: hashedPassword,
           name: "Nhat Khanh",
         }),
         ...Array.from(new Array(4)).map(
@@ -27,7 +30,7 @@ export const globalResolver = {
             new UserModel({
               email: faker.internet.email().toLowerCase(),
               name: faker.name.firstName(),
-              password: "Abc123@@",
+              password: hashedPassword,
             }),
         ),
       ])).map(user => user.id);

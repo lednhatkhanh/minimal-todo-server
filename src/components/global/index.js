@@ -1,2 +1,2 @@
-export * from "./globa.resolver";
+export * from "./global.resolver";
 export * from "./global.type";
