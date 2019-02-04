@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import { appConfig } from "~/config";
 
 export function connectToDatabase() {
+  mongoose.set("debug", false);
+
   return mongoose.connect(
     `mongodb://${appConfig.MONGO.USERNAME}:${appConfig.MONGO.PASSWORD}@${appConfig.MONGO.HOST}:${
       appConfig.MONGO.PORT

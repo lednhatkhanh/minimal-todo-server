@@ -16,6 +16,9 @@ export const taskResolver = {
       }
 
       return await TaskModel.find({ ownerId: userId })
+        .sort({
+          updatedAt: -1,
+        })
         .limit(limit)
         .skip(skip);
     },

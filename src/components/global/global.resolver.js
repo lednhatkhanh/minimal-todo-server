@@ -36,7 +36,7 @@ export const globalResolver = {
       ])).map(user => user.id);
 
       await TaskModel.insertMany(
-        Array.from(new Array(100)).map(() => {
+        Array.from(new Array(300)).map((_value, index) => {
           const due = faker.random.arrayElement([
             randomDate(new Date(), new Date(2019, 11, 31)),
             undefined,
@@ -46,7 +46,7 @@ export const globalResolver = {
             : undefined;
 
           return new TaskModel({
-            title: faker.name.title(),
+            title: `${index} - ${faker.lorem.sentence()}`,
             color: faker.random.arrayElement([
               "#f2a3bd",
               "#d6d963",
