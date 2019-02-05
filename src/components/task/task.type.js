@@ -7,6 +7,7 @@ export const taskType = gql`
     due: DateTime
     notification: DateTime
     owner: User!
+    steps: [Step!]!
     color: String!
     createdAt: DateTime!
     updatedAt: DateTime!
@@ -18,5 +19,6 @@ export const taskType = gql`
 
   extend type Query {
     getMyTasks(skip: Int = 0, limit: Int = 20): [Task!]! @auth
+    getTask(id: ID!): Task @auth
   }
 `;

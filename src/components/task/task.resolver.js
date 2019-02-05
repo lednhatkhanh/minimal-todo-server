@@ -2,17 +2,21 @@ import { AuthenticationError } from "apollo-server-express";
 
 import { TaskModel } from "./task.model";
 import { UserModel } from "../user";
+import { StepModel } from "../step";
 
 export const taskResolver = {
   Task: {
     async owner(parent) {
       return await UserModel.findOne(parent.ownerId);
     },
+    async steps({ id }) {
+      return await StepModel.find({ taskId: id });
+    },
   },
   Query: {
     async getMyTasks(_parent, { skip, limit }, { userId }) {
       if (!userId) {
-        throw new AuthenticationError("You need to login first");
+        throw new AuthenticationError("Unauthorized");
       }
 
       return await TaskModel.find({ ownerId: userId })
@@ -21,6 +25,13 @@ export const taskResolver = {
         })
         .limit(limit)
         .skip(skip);
+    },
+    async getTask(_parent, { id }, { userId }) {
+      if (!userId) {
+        throw new AuthenticationError("Unauthorized");
+      }
+
+      return await TaskModel.findOne({ _id: id, ownerId: userId });
     },
   },
   Mutation: {

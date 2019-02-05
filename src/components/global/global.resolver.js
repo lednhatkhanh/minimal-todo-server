@@ -7,6 +7,7 @@ import { TaskModel } from "../task";
 
 import { randomDate } from "./global.helper";
 import { appConfig } from "~/config";
+import { StepModel } from "../step";
 
 export const globalResolver = {
   DateTime: GraphQLDateTime,
@@ -35,8 +36,8 @@ export const globalResolver = {
         ),
       ])).map(user => user.id);
 
-      await TaskModel.insertMany(
-        Array.from(new Array(300)).map((_value, index) => {
+      const taskIds = (await TaskModel.insertMany(
+        Array.from(new Array(300)).map(() => {
           const due = faker.random.arrayElement([
             randomDate(new Date(), new Date(2019, 11, 31)),
             undefined,
@@ -46,7 +47,7 @@ export const globalResolver = {
             : undefined;
 
           return new TaskModel({
-            title: `${index} - ${faker.lorem.sentence()}`,
+            title: faker.lorem.sentence(),
             color: faker.random.arrayElement([
               "#f2a3bd",
               "#d6d963",
@@ -63,6 +64,17 @@ export const globalResolver = {
             ownerId: faker.random.arrayElement(userIds),
           });
         }),
+      )).map(task => task.id);
+
+      await StepModel.insertMany(
+        Array.from(new Array(1500)).map(
+          () =>
+            new StepModel({
+              title: faker.lorem.sentence(),
+              completed: faker.random.arrayElement([true, false]),
+              taskId: faker.random.arrayElement(taskIds),
+            }),
+        ),
       );
 
       return `Seeding succeeded`;

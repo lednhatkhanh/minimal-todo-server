@@ -14,7 +14,7 @@ const taskSchema = new mongoose.Schema(
       type: Date,
     },
     notification: { type: Date },
-    ownerId: { type: mongoose.Schema.Types.ObjectId },
+    ownerId: { type: mongoose.Schema.Types.ObjectId, index: true },
   },
   { timestamps: true },
 );
