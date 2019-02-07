@@ -31,27 +31,26 @@ export const stepResolver = {
       }
 
       // Aggregation!!!!
-      const isOwner = (await TaskModel.aggregate([
+      const tasks = await TaskModel.aggregate([
         {
           $lookup: { from: "steps", localField: "_id", foreignField: "taskId", as: "steps" },
         },
+        { $unwind: "$steps" },
         {
           $match: {
             ownerId: mongoose.Types.ObjectId(context.userId),
-            steps: { $elemMatch: { _id: mongoose.Types.ObjectId(id) } },
+            "steps._id": mongoose.Types.ObjectId(id),
           },
         },
-      ]).exec()).length;
+      ]).exec();
 
-      if (!isOwner) {
+      if (!tasks.length) {
         throw new Error("Unauthorized");
       }
 
-      const step = await StepModel.findById(id);
-      step.completed = !step.completed;
-      await step.save();
-
-      return step;
+      return await StepModel.findByIdAndUpdate(tasks[0].steps._id, {
+        completed: !tasks[0].steps.completed,
+      });
     },
   },
 };

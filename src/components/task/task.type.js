@@ -7,7 +7,7 @@ export const taskType = gql`
     due: DateTime
     notification: DateTime
     owner: User!
-    steps: [Step!]!
+    steps(skip: Int = 0, limit: Int = 5): [Step!]!
     color: String!
     createdAt: DateTime!
     updatedAt: DateTime!

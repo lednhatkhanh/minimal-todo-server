@@ -9,8 +9,10 @@ export const taskResolver = {
     async owner(parent) {
       return await UserModel.findOne(parent.ownerId);
     },
-    async steps({ id }) {
-      return await StepModel.find({ taskId: id });
+    async steps({ id }, { limit, skip }) {
+      return await StepModel.find({ taskId: id })
+        .limit(limit)
+        .skip(skip);
     },
   },
   Query: {
