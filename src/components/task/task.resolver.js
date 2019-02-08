@@ -6,17 +6,17 @@ import { StepModel } from "../step";
 
 export const taskResolver = {
   Task: {
-    async owner(parent) {
-      return await UserModel.findOne(parent.ownerId);
+    async owner(parent, _data, { userLoader }) {
+      return await userLoader.load(parent.ownerId);
     },
-    async steps({ id }, { limit, skip }) {
+    async steps({ id }, { limit, skip }, { stepLoader }) {
       return await StepModel.find({ taskId: id })
         .limit(limit)
         .skip(skip);
     },
   },
   Query: {
-    async getMyTasks(_parent, { skip, limit }, { userId }) {
+    async getMyTasks(_parent, { skip, limit }, { userId }, { userLoader }) {
       if (!userId) {
         throw new AuthenticationError("Unauthorized");
       }

@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
+import DataLoader from "dataloader";
+
 import { appConfig } from "~/config";
 
 export const userSchema = new mongoose.Schema({
@@ -36,4 +38,16 @@ userSchema.method("checkPassword", async function checkPassword(password) {
   }
 });
 
-export const UserModel = mongoose.model("User", userSchema);
+function getUserLoader(options = { limit: null, skip: null }) {
+  return new DataLoader(userIds =>
+    UserModel.find({ _id: { $in: [...new Set(userIds.map(id => id.toString()))] } })
+      .limit(options.limit)
+      .skip(options.skip)
+      .exec()
+      .then(users => userIds.map(id => users.find(user => user._id.toString() === id.toString()))),
+  );
+}
+
+const UserModel = mongoose.model("User", userSchema);
+
+export { getUserLoader, UserModel };
