@@ -1,48 +1,53 @@
 import { AuthenticationError } from "apollo-server-express";
 
 import { TaskModel } from "./task.model";
-import { UserModel } from "../user";
 import { StepModel } from "../step";
 
 export const taskResolver = {
   Task: {
-    async owner(parent, _data, { userLoader }) {
-      return await userLoader.load(parent.ownerId);
+    owner(
+      parent,
+      _data,
+      {
+        loaders: { userLoader },
+      },
+    ) {
+      return userLoader.load(parent.ownerId);
     },
-    async steps({ id }, { limit, skip }, { stepLoader }) {
-      return await StepModel.find({ taskId: id })
+    steps({ id }, { limit, skip }) {
+      return StepModel.find({ taskId: id })
         .limit(limit)
         .skip(skip);
     },
   },
   Query: {
-    async getMyTasks(_parent, { skip, limit }, { userId }, { userLoader }) {
+    getMyTasks(_parent, { skip, limit }, { userId }) {
       if (!userId) {
         throw new AuthenticationError("Unauthorized");
       }
 
-      return await TaskModel.find({ ownerId: userId })
+      return TaskModel.find({ ownerId: userId })
         .sort({
           updatedAt: -1,
         })
         .limit(limit)
         .skip(skip);
     },
-    async getTask(_parent, { id }, { userId }) {
+    getTask(_parent, { id }, { userId }) {
       if (!userId) {
         throw new AuthenticationError("Unauthorized");
       }
 
-      return await TaskModel.findOne({ _id: id, ownerId: userId });
+      return TaskModel.findOne({ _id: id, ownerId: userId });
     },
   },
   Mutation: {
-    async addTask(_parent, data, { userId }) {
+    addTask(_parent, data, { userId }) {
       if (!userId) {
         throw new AuthenticationError("You need to login first");
       }
 
-      return await new TaskModel({
+      return new TaskModel({
         ...data,
         ownerId: userId,
       }).save();

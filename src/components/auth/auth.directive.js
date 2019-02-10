@@ -5,10 +5,12 @@ import jwt from "jsonwebtoken";
 import { appConfig } from "~/config";
 
 export class AuthDirective extends SchemaDirectiveVisitor {
+  // eslint-disable-next-line class-methods-use-this
   visitFieldDefinition(field) {
     const { resolve = defaultFieldResolver } = field;
 
-    field.resolve = async function(...args) {
+    // eslint-disable-next-line no-param-reassign
+    field.resolve = async function resolveField(...args) {
       const [, , ctx] = args;
       const authHeader = ctx.req.get("authorization");
       const tokenRegex = /^Bearer\s\S+/i;

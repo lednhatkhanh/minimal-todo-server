@@ -6,8 +6,14 @@ import { StepModel } from "./step.model";
 
 export const stepResolver = {
   Step: {
-    async task(parent) {
-      return await TaskModel.findById(parent.taskId);
+    task(
+      parent,
+      _data,
+      {
+        loaders: { taskLoader },
+      },
+    ) {
+      return taskLoader.load(parent.taskId);
     },
   },
   Mutation: {
@@ -48,7 +54,7 @@ export const stepResolver = {
         throw new Error("Unauthorized");
       }
 
-      return await StepModel.findByIdAndUpdate(tasks[0].steps._id, {
+      return StepModel.findByIdAndUpdate(tasks[0].steps._id, {
         completed: !tasks[0].steps.completed,
       });
     },

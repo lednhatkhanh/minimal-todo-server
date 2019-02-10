@@ -38,16 +38,14 @@ userSchema.method("checkPassword", async function checkPassword(password) {
   }
 });
 
-function getUserLoader(options = { limit: null, skip: null }) {
+const UserModel = mongoose.model("User", userSchema);
+
+function getUserLoader() {
   return new DataLoader(userIds =>
     UserModel.find({ _id: { $in: [...new Set(userIds.map(id => id.toString()))] } })
-      .limit(options.limit)
-      .skip(options.skip)
       .exec()
-      .then(users => userIds.map(id => users.find(user => user._id.toString() === id.toString()))),
+      .then(users => userIds.map(userId => users.find(user => user.id === userId.toString()))),
   );
 }
-
-const UserModel = mongoose.model("User", userSchema);
 
 export { getUserLoader, UserModel };

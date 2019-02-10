@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import DataLoader from "dataloader";
 
 const taskSchema = new mongoose.Schema(
   {
@@ -19,4 +20,14 @@ const taskSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export const TaskModel = mongoose.model("task", taskSchema);
+const TaskModel = mongoose.model("task", taskSchema);
+
+function getTaskLoader() {
+  return new DataLoader(taskIds =>
+    TaskModel.find({ _id: { $in: taskIds } })
+      .exec()
+      .then(tasks => taskIds.map(taskId => tasks.find(task => task.id === taskId.toString()))),
+  );
+}
+
+export { TaskModel, getTaskLoader };

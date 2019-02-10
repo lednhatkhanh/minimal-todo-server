@@ -5,7 +5,7 @@ import { appConfig } from "~/config";
 import { connectToDatabase } from "~/app/database";
 import { typeDefs, resolvers, schemaDirectives } from "~/components";
 import { getUserLoader } from "~/components/user";
-import { createStepLoader } from "~/components/step";
+import { getTaskLoader } from "~/components/task";
 
 export async function startServer() {
   const server = new ApolloServer({
@@ -14,8 +14,10 @@ export async function startServer() {
     context: ctx => ({
       req: ctx.req,
       res: ctx.res,
-      userLoader: getUserLoader(),
-      stepLoader: createStepLoader(),
+      loaders: {
+        userLoader: getUserLoader(),
+        taskLoader: getTaskLoader(),
+      },
     }),
     schemaDirectives,
   });
@@ -33,6 +35,7 @@ export async function startServer() {
   server.applyMiddleware({ app });
 
   app.listen({ port: appConfig.APP.PORT }, () => {
+    // eslint-disable-next-line no-console
     console.log(`Server ready at http://localhost:${appConfig.APP.PORT}${server.graphqlPath}`);
   });
 }

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import DataLoader from "dataloader";
 
 const stepSchema = new mongoose.Schema(
   {
@@ -13,7 +12,6 @@ const stepSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-export function createStepLoader() {
-  return new DataLoader(stepIds => StepModel.find({ _id: { $in: stepIds } }).exec());
-}
-export const StepModel = mongoose.model("Step", stepSchema);
+const StepModel = mongoose.model("Step", stepSchema);
+
+export { StepModel };
