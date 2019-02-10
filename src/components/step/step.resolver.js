@@ -69,5 +69,32 @@ export const stepResolver = {
 
       return updatedStep;
     },
+    async deleteStep(_parent, { id }, context) {
+      if (!context.userId) {
+        throw new AuthenticationError("unauthorized");
+      }
+
+      // Aggregation!!!!
+      const tasks = await TaskModel.aggregate([
+        {
+          $lookup: { from: "steps", localField: "_id", foreignField: "taskId", as: "steps" },
+        },
+        { $unwind: "$steps" },
+        {
+          $match: {
+            ownerId: mongoose.Types.ObjectId(context.userId),
+            "steps._id": mongoose.Types.ObjectId(id),
+          },
+        },
+      ]).exec();
+
+      if (!tasks.length) {
+        throw new Error("Unauthorized");
+      }
+
+      const deletedStep = await StepModel.findByIdAndDelete(tasks[0].steps._id).exec();
+
+      return deletedStep;
+    },
   },
 };

@@ -13,5 +13,6 @@ export const stepType = gql`
   extend type Mutation {
     addStep(taskId: ID!, title: String!, completed: Boolean!): Step! @auth
     toggleStep(id: ID!): Step! @auth
+    deleteStep(id: ID!): Step! @auth
   }
 `;
