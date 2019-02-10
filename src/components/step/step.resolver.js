@@ -22,7 +22,10 @@ export const stepResolver = {
         throw new AuthenticationError("unauthorized");
       }
 
-      const isOwner = await TaskModel.findOne({ id: taskId, ownerId: context.userId });
+      const isOwner = await TaskModel.findOne({
+        _id: mongoose.Types.ObjectId(taskId),
+        ownerId: mongoose.Types.ObjectId(context.userId),
+      });
       if (!isOwner) {
         throw new AuthenticationError("unauthorized");
       }
@@ -54,9 +57,17 @@ export const stepResolver = {
         throw new Error("Unauthorized");
       }
 
-      return StepModel.findByIdAndUpdate(tasks[0].steps._id, {
-        completed: !tasks[0].steps.completed,
-      });
+      const updatedStep = await StepModel.findByIdAndUpdate(
+        tasks[0].steps._id,
+        {
+          completed: !tasks[0].steps.completed,
+        },
+        {
+          new: true,
+        },
+      );
+
+      return updatedStep;
     },
   },
 };
