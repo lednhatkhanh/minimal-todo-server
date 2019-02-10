@@ -16,6 +16,7 @@ export const taskResolver = {
     },
     steps({ id }, { limit, skip }) {
       return StepModel.find({ taskId: id })
+        .sort({ updatedAt: -1 })
         .limit(limit)
         .skip(skip);
     },
